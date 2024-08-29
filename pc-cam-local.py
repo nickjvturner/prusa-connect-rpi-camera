@@ -46,7 +46,7 @@ def generate_frames(sleep_duration):
         if current_time - last_saved_time >= 10:
             # Save the current frame to disk
             cv2.imwrite('latest_image.jpg', rotated_frame)  # Save the frame as a .jpg file
-            print(f"Saved frame to {filename}")
+            print(f"captured image saved successfully")
 
             # Update the last saved time
             last_saved_time = current_time
