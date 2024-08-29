@@ -1,7 +1,7 @@
 import requests
 import time
 
-from secrets import prusa_connect_camera_url, image_path, prusa_camera_api_token
+from secrets import camera_fingerprint, prusa_camera_api_token, prusa_connect_camera_url, image_path
 
 
 def upload_image(url, fingerprint, token, image_path):
