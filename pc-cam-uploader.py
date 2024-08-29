@@ -29,5 +29,5 @@ def upload_image(url, fingerprint, token, image_path):
 
 if __name__ == '__main__':
     while True:
-        upload_image(url, camera_fingerprint, prusa_camera_api_token, image_path)
+        upload_image(prusa_connect_camera_url, camera_fingerprint, prusa_camera_api_token, image_path)
         time.sleep(10)  # Upload every 10 seconds
