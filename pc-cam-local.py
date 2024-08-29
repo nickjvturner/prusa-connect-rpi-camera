@@ -3,7 +3,7 @@ import cv2
 import time
 
 # Define the filename to save the frames
-# from secrets import image_path
+from secrets import image_path
 
 # Define sleep in seconds duration to achieve desired fps
 sleep_duration = 2
@@ -26,7 +26,7 @@ def rotate_frame(frame, angle):
         return frame
 
 
-def generate_frames(sleep_duration):
+def generate_frames(filename, sleep_duration):
     last_saved_time = time.time()  # Record the start time to calculate the elapsed time
 
     while True:
@@ -48,7 +48,7 @@ def generate_frames(sleep_duration):
         # Check if 10 seconds have passed since the last save
         if current_time - last_saved_time >= 10:
             # Save the current frame to disk
-            cv2.imwrite('latest_frame.jpg', rotated_frame)  # Save the frame as a .jpg file
+            cv2.imwrite(filename, rotated_frame)  # Save the frame as a .jpg file
             # print(f"Saved frame to {filename}")
 
             # Update the last saved time
@@ -60,7 +60,7 @@ def generate_frames(sleep_duration):
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(sleep_duration), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(generate_frames(image_path, sleep_duration), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/')
