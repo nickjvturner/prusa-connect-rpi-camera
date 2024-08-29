@@ -49,9 +49,10 @@ Activate venv
     sudo apt install python3-opencv -y
     sudo apt-get install uuid-runtime
 
-#### Install requests and OpenCV (pip3)
+#### Install requests, OpenCV, Flask (pip3)
     pip3 install requests
     pip3 install opencv-python
+    pip3 install flask
 
 #### Generate an UUID for the camera
 The camera requires an UUID, we can generate one using uuidgen

@@ -1,10 +1,7 @@
 import requests
 import time
 
-from secrets import camera_fingerprint, prusa_camera_api_token
-
-url = "https://connect.prusa3d.com/c/snapshot"
-image_path = '~/prusa-connect-rpi-camera/latest_image.jpg'
+from secrets import prusa_connect_camera_url, image_path, prusa_camera_api_token
 
 
 def upload_image(url, fingerprint, token, image_path):

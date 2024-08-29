@@ -3,7 +3,7 @@ import cv2
 import time
 
 # Define the filename to save the frames
-image_path = '~/prusa-connect-rpi-camera/latest_image.jpg'
+from secrets import image_path
 
 # Define sleep in seconds duration to achieve desired fps
 sleep_duration = 2
