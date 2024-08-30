@@ -1,63 +1,83 @@
-# USB camera Prusa Connect
+# prusa-connect-rpi-camera
 
 ## Prusa Connect
 
 ### Login to Prusa Connect
-Navigate to your printer that you want to pair the camera with
-Navigate to Camera
+Navigate to ```your printer that you want to pair the camera with```
 
+Navigate to ```Camera```
 
-    + Add new other camera
+```
++ Add new other camera
+```
 
-Note the “Token”, We will need that later
+Note the ```Token```, We will need that later
 
 ## Raspberry Pi
 Starting with fresh SD image of Bookworm
 
-### Setup
-
 #### Update and Upgrade
-    sudo apt update
-    sudo apt upgrade -y
-    
+```
+sudo apt update
+sudo apt upgrade -y
+```
+
 #### Install Python 3 and Pip
 Python 3 should be pre-installed, but you may need to install pip for package management
 
-    sudo apt install python3-pip -y
+```
+sudo apt install python3-pip -y
+```
 
 #### Install git
 
-    sudo apt install git
+```
+sudo apt install git
+```
 
 #### Clone this repo
 
-    git clone https://github.com/nickjvturner/prusa-connect-rpi-camera
+```
+git clone https://github.com/nickjvturner/prusa-connect-rpi-camera
+```
 
 Navigate into the cloned dir
 
-    cd prusa_connect_camera
+```
+cd prusa-connect-rpi-camera
+```
 
 #### Create a Virtual Environment
 
-    python3 -m venv venv
+```
+python3 -m venv venv
+```
 
-Activate venv
+#### Activate the Virtual Environment
 
-    source venv/bin/activate
+```
+source venv/bin/activate
+```
 
 #### Install OpenCV and uuidgen (apt)
-    sudo apt install python3-opencv -y
-    sudo apt-get install uuid-runtime
+```
+sudo apt install python3-opencv -y
+sudo apt-get install uuid-runtime
+```
 
 #### Install requests, OpenCV, Flask (pip3)
-    pip3 install requests
-    pip3 install opencv-python
-    pip3 install flask
+```
+pip3 install requests
+pip3 install opencv-python
+pip3 install flask
+```
 
-#### Generate an UUID for the camera
-The camera requires an UUID, we can generate one using uuidgen
+#### Generate a UUID for the camera
+The camera requires a UUID, we can generate one using ```uuidgen```
 
-    uuidgen
+```
+uuidgen
+```
 
 #### Update secrets.py
 Add the freshly created UUID into the secrets.py file
@@ -73,9 +93,12 @@ Review:
 ## Configure scripts to run on boot
 
 ### Create a service file for pc-cam-local.py
-    sudo nano /etc/systemd/system/pc-cam-local.service
+```
+sudo nano /etc/systemd/system/pc-cam-local.service
+```
 
-```[Unit]
+```
+[Unit]
 Description=RPi Camera Local Web Server
 After=network.target
 
@@ -89,15 +112,13 @@ User=pi
 WantedBy=multi-user.target
 ```
 
-#### Enable and start the service
-    sudo systemctl daemon-reload
-    sudo systemctl enable prusa_connect_camera
-    sudo systemctl start prusa_connect_camera
-
 ### Create a service file for pc-cam-uploader.py
-    sudo nano /etc/systemd/system/pc-cam-uploader.service
+```
+sudo nano /etc/systemd/system/pc-cam-uploader.service
+```
 
-```[Unit]
+```
+[Unit]
 Description=Prusa Connect RPi Camera image uploader
 After=network.target
 
@@ -109,3 +130,15 @@ User=pi
 
 [Install]
 WantedBy=multi-user.target
+```
+
+#### Enable and start the services
+```
+sudo systemctl daemon-reload
+
+sudo systemctl enable pc-cam-local
+sudo systemctl start pc-cam-local
+
+sudo systemctl enable pc-cam-uploader
+sudo systemctl start pc-cam-uploader
+```

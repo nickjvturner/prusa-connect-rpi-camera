@@ -1,6 +1,7 @@
 from flask import Flask, Response
 import cv2
 import time
+import threading
 
 # Define sleep in seconds duration to achieve desired fps
 sleep_duration = 2
@@ -10,6 +11,10 @@ app = Flask(__name__)
 
 # Initialize the camera using OpenCV
 camera = cv2.VideoCapture(0)  # '0' is the default device ID for the first USB camera
+
+# Global variable to store the last frame
+last_frame = None
+frame_lock = threading.Lock()  # Lock to synchronize access to the frame
 
 
 def rotate_frame(frame, angle):
@@ -23,41 +28,57 @@ def rotate_frame(frame, angle):
         return frame
 
 
-def generate_frames(sleep_duration):
-    last_saved_time = time.time()  # Record the start time to calculate the elapsed time
-
+def capture_frames():
+    """Continuously capture frames from the camera."""
+    global last_frame
     while True:
         success, frame = camera.read()  # Read a frame from the USB camera
         if not success:
             break
 
         rotated_frame = rotate_frame(frame, 0)  # Rotate by 0 degrees, no rotation applied
-        ret, buffer = cv2.imencode('.jpg', rotated_frame)
-        frame = buffer.tobytes()
+
+        # Store the last frame with a lock
+        with frame_lock:
+            last_frame = rotated_frame
+
+        time.sleep(sleep_duration)  # Add delay to achieve desired fps
+
+
+def save_frame_periodically(interval=10):
+    """Save the last captured frame every interval seconds."""
+    global last_frame
+    while True:
+        time.sleep(interval)
+
+        # Save the last frame to disk
+        with frame_lock:
+            if last_frame is not None:
+                cv2.imwrite('latest_image.jpg', last_frame)  # Save the frame as a .jpg file
+                print(f"Captured image saved successfully")
+
+
+def generate_frames():
+    """Generate frames for streaming."""
+    global last_frame
+    while True:
+        with frame_lock:
+            if last_frame is None:
+                continue
+
+            ret, buffer = cv2.imencode('.jpg', last_frame)
+            frame = buffer.tobytes()
 
         # Send the frame to the client
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-        # Get the current time
-        current_time = time.time()
-
-        # Check if 10 seconds have passed since the last save
-        if current_time - last_saved_time >= 10:
-            # Save the current frame to disk
-            cv2.imwrite('latest_image.jpg', rotated_frame)  # Save the frame as a .jpg file
-            print(f"captured image saved successfully")
-
-            # Update the last saved time
-            last_saved_time = current_time
-
-        # Add delay to achieve desired fps
         time.sleep(sleep_duration)
 
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(sleep_duration), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/')
@@ -76,4 +97,12 @@ def index():
 
 
 if __name__ == '__main__':
+    # Start threads for capturing frames and saving them periodically
+    capture_thread = threading.Thread(target=capture_frames, daemon=True)
+    save_thread = threading.Thread(target=save_frame_periodically, daemon=True)
+
+    capture_thread.start()
+    save_thread.start()
+
+    # Start the Flask application
     app.run(host='0.0.0.0', port=5000)
