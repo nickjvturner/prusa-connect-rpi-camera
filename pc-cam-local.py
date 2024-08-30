@@ -55,7 +55,7 @@ def save_frame_periodically(interval=10):
         with frame_lock:
             if last_frame is not None:
                 cv2.imwrite('latest_image.jpg', last_frame)  # Save the frame as a .jpg file
-                print(f"Captured image saved successfully")
+                # print(f"Captured image saved successfully")
 
 
 def generate_frames():
