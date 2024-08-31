@@ -32,11 +32,14 @@ def rotate_frame(frame, angle):
 def add_timestamp_to_frame(frame):
     """Adds a timestamp to the frame."""
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Current date and time
-    font = cv2.FONT_HERSHEY_SIMPLEX
+    font = cv2.FONT_HERSHEY_DUPLEX
     font_scale = 1
     color = (255, 255, 255)  # White color
-    thickness = 2
-    position = (10, 30)  # Position to place the timestamp on the frame
+    thickness = 1
+
+    # Calculate the position for the bottom left corner
+    text_size = cv2.getTextSize(timestamp, font, font_scale, thickness)[0]  # Get text size
+    position = (10, frame.shape[0] - 10)  # 10 pixels from the left and 10 pixels from the bottom
 
     cv2.putText(frame, timestamp, position, font, font_scale, color, thickness, cv2.LINE_AA)
 
