@@ -112,6 +112,13 @@ User=pi
 WantedBy=multi-user.target
 ```
 
+```
+sudo systemctl daemon-reload
+
+sudo systemctl enable pc-cam-local
+sudo systemctl start pc-cam-local
+```
+
 ### Create a service file for pc-cam-uploader.py
 ```
 sudo nano /etc/systemd/system/pc-cam-uploader.service
@@ -132,12 +139,9 @@ User=pi
 WantedBy=multi-user.target
 ```
 
-#### Enable and start the services
+#### Enable and start the service
 ```
 sudo systemctl daemon-reload
-
-sudo systemctl enable pc-cam-local
-sudo systemctl start pc-cam-local
 
 sudo systemctl enable pc-cam-uploader
 sudo systemctl start pc-cam-uploader
