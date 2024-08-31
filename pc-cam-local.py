@@ -33,7 +33,7 @@ def add_timestamp_to_frame(frame):
     """Adds a timestamp to the frame."""
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Current date and time
     font = cv2.FONT_HERSHEY_DUPLEX
-    font_scale = 1
+    font_scale = 0.8
     color = (255, 255, 255)  # White color
     thickness = 1
 
