@@ -6,3 +6,6 @@ prusa_camera_api_token = "YOUR-PRUSA-CONNECT-CAMERA-TOKEN"
 
 prusa_connect_camera_url = "https://connect.prusa3d.com/c/snapshot"
 image_path = '/home/pi/prusa-connect-rpi-camera/latest_image.jpg'
+
+# The name shown for this camera in Prusa Connect
+camera_name = "YOUR-CAMERA-NAME"
