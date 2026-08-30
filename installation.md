@@ -82,6 +82,7 @@ uuidgen
 #### Update secrets.py
 Add the freshly created UUID into the secrets.py file
 Add the token from earlier to secrets.py
+Add whatever name you want
 
 #### Review code before execution
 It is good practice to quickly look through ‘simple’ scripts created by others before running them.
@@ -89,6 +90,9 @@ It is good practice to quickly look through ‘simple’ scripts created by othe
 Review:
 - pc-cam-local.py
 - pc-cam-uploader.py
+
+#### Rename Camera
+If you want to rename your camera, after setting your secrets.py properly, run the pc-cam-rename.py script once. You should see the UI in Prusa Connect reflect this new name. 
 
 ## Configure scripts to run on boot
 
